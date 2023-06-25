@@ -1,0 +1,11 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.MyButtonPlugin.cpp.obj": [
+			"MyActor.gen.cpp.obj",
+			"MyButtonPlugin.init.gen.cpp.obj",
+			"MyActor.cpp.obj",
+			"MyButtonPlugin.cpp.obj"
+		]
+	}
+}

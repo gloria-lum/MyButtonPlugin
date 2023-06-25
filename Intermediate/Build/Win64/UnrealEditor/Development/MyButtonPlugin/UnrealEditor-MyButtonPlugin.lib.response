@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-MyButtonPlugin.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Development\accdEsercizi\MyPluginProject\Intermediate\Build\Win64\MyPluginProjectEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.obj"
+"C:\Development\accdEsercizi\MyPluginProject\Plugins\MyButtonPlugin\Intermediate\Build\Win64\UnrealEditor\Development\MyButtonPlugin\Module.MyButtonPlugin.cpp.obj"
+"C:\Development\accdEsercizi\MyPluginProject\Plugins\MyButtonPlugin\Intermediate\Build\Win64\UnrealEditor\Development\MyButtonPlugin\Default.rc2.res"
+/OUT:"C:\Development\accdEsercizi\MyPluginProject\Plugins\MyButtonPlugin\Intermediate\Build\Win64\UnrealEditor\Development\MyButtonPlugin\UnrealEditor-MyButtonPlugin.lib"
