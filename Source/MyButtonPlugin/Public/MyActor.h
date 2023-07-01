@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -8,23 +7,21 @@
 
 
 UCLASS()
+
 class MYBUTTONPLUGIN_API AMyActor : public AActor
 {
 	GENERATED_BODY()
 
 public:
 	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* CubeMeshComponent;
-
-	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* VisualMesh;
+		UStaticMeshComponent* visual_mesh;
 
 
 	UPROPERTY(EditAnywhere, Category = "Materials")
-		UMaterialInstanceDynamic* DynamicMaterialInstance;
+		UMaterialInstanceDynamic* dynamic_material_instance;
 
-	FVector CubeLocation;
-	FRotator CubeRotation;
+	FVector cube_location;
+	FRotator cube_rotation;
 
 	AMyActor();
 	virtual void BeginPlay();

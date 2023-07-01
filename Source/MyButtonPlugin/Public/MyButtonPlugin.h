@@ -8,14 +8,15 @@
 class FMyButtonPluginModule : public IModuleInterface
 {
 public:
-	TSharedPtr<SButton> buttonMove;
-	TSharedPtr<SButton> buttonChange;
-	TSharedPtr<SButton> buttonDestroyON;
-	TSharedPtr<SButton> buttonDestroyOFF;
 
-	static bool moveButtonPressed;
-	static bool colorButtonPressed;
-	static bool destroyButtonPressed;
+	TSharedPtr<SButton> button_move;
+	TSharedPtr<SButton> button_change;
+	TSharedPtr<SButton> button_destroy_on;
+	TSharedPtr<SButton> button_destroy_off;
+
+	static bool move_button_pressed;
+	static bool color_button_pressed;
+	static bool destroy_button_pressed;
 
 	FReply UpdateButtonVisibility();
 	FReply ChangeColor();
@@ -27,4 +28,5 @@ public:
 	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
+
 };

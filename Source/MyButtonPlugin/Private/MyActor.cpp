@@ -2,49 +2,52 @@
 
 
 #include "MyActor.h"
+#include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Components/StaticMeshComponent.h"
+#include "Math/Color.h"
 #include "MyButtonPlugin.h"
 
 
-// Sets default values
 AMyActor::AMyActor()
 {
-		
+
+	PrimaryActorTick.bCanEverTick = true;
+	bRunConstructionScriptOnDrag = true;
+	visual_mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	//VisualMesh->SetupAttachment(RootComponent);
+	SetRootComponent(visual_mesh);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeVisualAsset(TEXT("/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube"));//StaticMesh'/Engine/BasicShapes/Sphere.Sphere'
+
+	if (CubeVisualAsset.Succeeded())
+	{
+		visual_mesh->SetStaticMesh(CubeVisualAsset.Object);
+		visual_mesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+		visual_mesh->SetVisibility(true);
+		visual_mesh->SetHiddenInGame(false);
+	}
+
+	UWorld* world = GetWorld();
+
+	if (world)
+	{
+		cube_location = FVector(0.f, 10.f, 0.f);
+		cube_rotation = FRotator(0.f, 10.f, 0.f);
+		FTransform CubeTransform(cube_rotation, cube_location);
 		PrimaryActorTick.bCanEverTick = true;
-		bRunConstructionScriptOnDrag = true;
-		VisualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-		//VisualMesh->SetupAttachment(RootComponent);
-		SetRootComponent(VisualMesh);
-		static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeVisualAsset(TEXT("/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube"));//StaticMesh'/Engine/BasicShapes/Sphere.Sphere'
+		SetActorHiddenInGame(false);
+	}
 
-		if (CubeVisualAsset.Succeeded())
-		{
-			VisualMesh->SetStaticMesh(CubeVisualAsset.Object);
-			VisualMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
-			VisualMesh->SetVisibility(true);
-			VisualMesh->SetHiddenInGame(false);
-		}
-
-		UWorld* World = GetWorld();
-
-		if (World)
-		{
-			CubeLocation = FVector(0.f, 10.f, 0.f);
-			CubeRotation = FRotator(0.f, 10.f, 0.f);
-			FTransform CubeTransform(CubeRotation, CubeLocation);
-			PrimaryActorTick.bCanEverTick = true;
-			SetActorHiddenInGame(false);
-		}
-		
 
 }
 
 // Called when the game starts or when spawned
 void AMyActor::BeginPlay()
 {
-	
+
 	Super::BeginPlay();
 
-	
 }
 
 
@@ -52,16 +55,16 @@ void AMyActor::BeginPlay()
 void AMyActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	if (FMyButtonPluginModule::moveButtonPressed)
+
+	if (FMyButtonPluginModule::move_button_pressed)
 	{
 		Move();
 	}
-	if (FMyButtonPluginModule::colorButtonPressed)
+	if (FMyButtonPluginModule::color_button_pressed)
 	{
 		CreateAndSetMaterialInstanceDynamic();
 	}
-	if (FMyButtonPluginModule::destroyButtonPressed)
+	if (FMyButtonPluginModule::destroy_button_pressed)
 	{
 		this->Destroy();
 	}
@@ -70,33 +73,33 @@ void AMyActor::Tick(float DeltaTime)
 void AMyActor::CreateAndSetMaterialInstanceDynamic()
 {
 	FLinearColor RandomColor = FLinearColor::MakeRandomColor();
-	if (!DynamicMaterialInstance)
+	if (!dynamic_material_instance)
 	{
-		DynamicMaterialInstance = UMaterialInstanceDynamic::Create(VisualMesh->GetMaterial(0), this);
+		dynamic_material_instance = UMaterialInstanceDynamic::Create(visual_mesh->GetMaterial(0), this);
 	}
 	else
 	{
-		DynamicMaterialInstance = Cast<UMaterialInstanceDynamic>(VisualMesh->GetMaterial(0));
+		dynamic_material_instance = Cast<UMaterialInstanceDynamic>(visual_mesh->GetMaterial(0));
 	}
-	DynamicMaterialInstance->SetVectorParameterValue(TEXT("Color"), RandomColor);
-	VisualMesh->SetMaterial(0, DynamicMaterialInstance);
+	dynamic_material_instance->SetVectorParameterValue(TEXT("Color"), RandomColor);
+	visual_mesh->SetMaterial(0, dynamic_material_instance);
 
 }
 void AMyActor::Move()
 {
-	int MinX = 100;
-	int MaxX = 300;
-	int MinY = 100;
-	int MaxY = 800;
-	int MaxZ = 800;
-	int MinZ = 100;
+	int min_x = 100;
+	int max_x = 300;
+	int min_y = 100;
+	int max_y = 800;
+	int max_z = 800;
+	int min_z = 100;
 
 	UWorld* World = GetWorld();
 
 	if (World)
 	{
-		CubeLocation = FVector(FMath::RandRange(MinX, MaxX), FMath::RandRange(MinY, MaxY), FMath::RandRange(MinZ, MaxZ));
-		SetActorLocation(CubeLocation);
+		cube_location = FVector(FMath::RandRange(min_x, max_x), FMath::RandRange(min_y, max_y), FMath::RandRange(min_z, max_z));
+		SetActorLocation(cube_location);
 	}
 }
 
@@ -105,5 +108,5 @@ AMyActor::~AMyActor()
 
 	this->DestroyConstructedComponents();
 	Super::Destroy();
-	
+
 }
